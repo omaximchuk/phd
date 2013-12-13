@@ -3,23 +3,22 @@ import java.math.RoundingMode;
 
 import static java.lang.Math.max;
 import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 public class Algorithm {
 
     Double fixedCosts = 0.01;
     Double propCosts = 0.0;
-    Double time = 1.0;
-    Double space = 5.0;
-    Integer N = 400;
-    Integer M = 50;
-    Double[][] v1 = new Double[N][M];
-    Double[][] v0 = new Double[N][M];
-    Double[][] s = new Double[N][M];
-    Integer[][] u0 = new Integer[N][M];
-    Integer[][] u1 = new Integer[N][M];
-    private Double deltaT = time / N;
-    private Double deltaS = space / M;
+    Double TIME_INTERVAL = 1.0;
+    Double SPACE_INTERVAL = 5.0;
+    Integer SPACE_STEPS = 50;
+    Integer TIME_STEPS = 400;
+    Double[][] v1 = new Double[SPACE_STEPS][TIME_STEPS];
+    Double[][] v0 = new Double[SPACE_STEPS][TIME_STEPS];
+    Double[][] s = new Double[SPACE_STEPS][TIME_STEPS];
+    Integer[][] u0 = new Integer[SPACE_STEPS][TIME_STEPS];
+    Integer[][] u1 = new Integer[SPACE_STEPS][TIME_STEPS];
+    private Double deltaT = TIME_INTERVAL / TIME_STEPS;
+    private Double deltaS = SPACE_INTERVAL / SPACE_STEPS;
     private Double mu = 0.4;
     private Double sigma = 0.4;
 
@@ -30,33 +29,33 @@ public class Algorithm {
     }
 
     private void initArrays() {
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < M; j++) {
-                s[i][j] = j * deltaS;
+        for (int i = 0; i < SPACE_STEPS; i++)
+            for (int j = 0; j < TIME_STEPS; j++) {
+                s[i][j] = i * deltaS;
                 u0[i][j] = 0;
                 u1[i][j] = 0;
             }
-        // Boundary and terminal conditions
-        for (int j = 0; j < M; j++) {
-            v0[N - 1][j] = 0.0;
-            v1[N - 1][j] = costsSell(s[N - 1][j]);
+        // Boundary conditions
+        for (int i = 0; i < SPACE_STEPS; i++) {
+            v0[i][TIME_STEPS - 1] = 0.0;
+            v1[i][TIME_STEPS - 1] = costsSell(s[i][TIME_STEPS - 1]);
         }
-
-        for (int i = 0; i < N; i++) {
-            v0[i][0] = 0.0;
-            v0[i][M - 1] = 0.0;
-            v1[i][0] = costsSell(0.0);
-            v1[i][M - 1] = costsSell(s[i][M - 1]);
+        // Terminal conditions
+        for (int j = 0; j < TIME_STEPS; j++) {
+            v0[0][j] = 0.0;
+            v0[SPACE_STEPS - 1][j] = 0.0;
+            v1[0][j] = costsSell(0.0);
+            v1[SPACE_STEPS - 1][j] = costsSell(s[SPACE_STEPS - 1][j]);
         }
     }
 
     private void processArrays() {
-        for (int i = N - 2; i >= 0; i--)
-            for (int j = 1; j < M - 1; j++) {
-                double m1 = v0[i + 1][j] + deltaT * A(v0, i + 1, j);
-                double m2 = v1[i + 1][j] + costsBuy(s[i][j]);
-                double n1 = v1[i + 1][j] + deltaT * A(v1, i + 1, j);
-                double n2 = v0[i + 1][j] + costsSell(s[i][j]);
+        for (int j = TIME_STEPS - 2; j >= 0; j--)
+            for (int i = 1; i < SPACE_STEPS - 1; i++) {
+                double m1 = v0[i][j + 1] + deltaT * A(v0, i, j + 1);
+                double m2 = v1[i][j + 1] + costsBuy(s[i][j]);
+                double n1 = v1[i][j + 1] + deltaT * A(v1, i, j + 1);
+                double n2 = v0[i][j + 1] + costsSell(s[i][j]);
                 v1[i][j] = max(n1, n2);
                 v0[i][j] = max(m1, m2);
                 u0[i][j] = m1 > m2 ? 0 : -1;
@@ -73,8 +72,8 @@ public class Algorithm {
     }
 
     private Double A(Double[][] v, Integer i, Integer j) {
-        return mu(s[i - 1][j]) * vOverS(v[i][j + 1], v[i][j]) +
-                .5 * pow(sigma(s[i - 1][j]), 2) * vOverS2(v[i][j + 1], v[i][j], v[i][j - 1]);
+        return mu(s[i][j-1]) * vOverS(v[i+1][j], v[i][j]) +
+                .5 * pow(sigma(s[i][j-1]), 2) * vOverS2(v[i+1][j], v[i][j], v[i-1][j]);
     }
 
     private Double vOverS(Double v1, Double v0) {
@@ -97,12 +96,12 @@ public class Algorithm {
         return v1;
     }
 
-    public Integer getN() {
-        return N;
+    public Integer getSPACE_STEPS() {
+        return SPACE_STEPS;
     }
 
-    public Integer getM() {
-        return M;
+    public Integer getTIME_STEPS() {
+        return TIME_STEPS;
     }
 
     public Number[][] getS() {
@@ -118,9 +117,9 @@ public class Algorithm {
     }
 
     public void printArray(Number[][] array) {
-        for (int i = N - 1; i >= 0; i--) {
-            System.out.print("i = " + (i + 1) + ":  ");
-            for (int j = 0; j < M; j++) {
+        for (int j = TIME_STEPS - 1; j >= 0; j--) {
+            System.out.print("time step = " + (j + 1) + ":  ");
+            for (int i = 0; i < SPACE_STEPS; i++) {
                 String space = (array[i][j].doubleValue() < 0) ? " " : "  ";
                 if (array[i][j] instanceof Double)
                     System.out.print(BigDecimal.valueOf((Double) array[i][j]).setScale(2, RoundingMode.HALF_UP) + space);
