@@ -1,26 +1,32 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static java.lang.Math.max;
-import static java.lang.Math.pow;
+import static java.lang.Math.*;
 
 public class Algorithm {
 
     Double fixedCosts = 0.01;
     Double propCosts = 0.0;
+
+    private Double mu = 0.4;
+    private Double sigma = 0.2;
+
     Double TIME_INTERVAL = 1.0;
     Double SPACE_INTERVAL = 5.0;
-    Integer SPACE_STEPS = 50;
-    Integer TIME_STEPS = 400;
+
+    private Double deltaT = 0.03;
+    private Double deltaS = sigma*sqrt(deltaT) + .0001;
+
+    Integer TIME_STEPS = (int)floor(TIME_INTERVAL/deltaT);
+    Integer SPACE_STEPS = (int)floor(SPACE_INTERVAL/deltaS);
+
     Double[][] v1 = new Double[SPACE_STEPS][TIME_STEPS];
     Double[][] v0 = new Double[SPACE_STEPS][TIME_STEPS];
     Double[][] s = new Double[SPACE_STEPS][TIME_STEPS];
     Integer[][] u0 = new Integer[SPACE_STEPS][TIME_STEPS];
     Integer[][] u1 = new Integer[SPACE_STEPS][TIME_STEPS];
-    private Double deltaT = TIME_INTERVAL / TIME_STEPS;
-    private Double deltaS = SPACE_INTERVAL / SPACE_STEPS;
-    private Double mu = 0.4;
-    private Double sigma = 0.4;
+
+
 
     public Algorithm() {
         super();
@@ -72,8 +78,8 @@ public class Algorithm {
     }
 
     private Double A(Double[][] v, Integer i, Integer j) {
-        return mu(s[i][j-1]) * vOverS(v[i+1][j], v[i][j]) +
-                .5 * pow(sigma(s[i][j-1]), 2) * vOverS2(v[i+1][j], v[i][j], v[i-1][j]);
+        return mu(s[i][j - 1]) * vOverS(v[i + 1][j], v[i][j]) +
+                .5 * pow(sigma(s[i][j - 1]), 2) * vOverS2(v[i + 1][j], v[i][j], v[i - 1][j]);
     }
 
     private Double vOverS(Double v1, Double v0) {
@@ -130,4 +136,11 @@ public class Algorithm {
         }
     }
 
+    public Double getMu() {
+        return mu;
+    }
+
+    public Double getSigma() {
+        return sigma;
+    }
 }
