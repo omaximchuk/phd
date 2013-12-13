@@ -11,12 +11,16 @@ public class SimpleAlgorithm {
     Double up = 1.1;
     Double down = 0.5;
     Double propCosts = 0.01;
-    Integer N = 10;
-    Double[][] v1 = new Double[N + 1][N];
-    Double[][] v0 = new Double[N + 1][N];
-    Double[][] s = new Double[N + 1][N];
-    Integer[][] u0 = new Integer[N + 1][N];
-    Integer[][] u1 = new Integer[N + 1][N];
+    Integer TIME_STEPS = 10;
+
+    Double mu;
+    Double sigma;
+
+    Double[][] v1 = new Double[TIME_STEPS + 1][TIME_STEPS];
+    Double[][] v0 = new Double[TIME_STEPS + 1][TIME_STEPS];
+    Double[][] s = new Double[TIME_STEPS + 1][TIME_STEPS];
+    Integer[][] u0 = new Integer[TIME_STEPS + 1][TIME_STEPS];
+    Integer[][] u1 = new Integer[TIME_STEPS + 1][TIME_STEPS];
 
     public SimpleAlgorithm() {
         super();
@@ -26,20 +30,20 @@ public class SimpleAlgorithm {
 
     private void initArrays() {
         s[0][0] = s0;
-        for (int j = 1; j < N; j++)
+        for (int j = 1; j < TIME_STEPS; j++)
             for (int i = 0; i <= j; i++) {
                 s[i][j] = Math.pow(up, j - i) * Math.pow(down, i);
                 u0[i][j] = 0;
                 u1[i][j] = 0;
             }
-        for (int i = 0; i < N; i++) {
-            v0[i][N - 1] = 0.0;
-            v1[i][N - 1] = 0.0;//(1 - propCosts) * s[SPACE_STEPS-1][i] - fixedCosts;
+        for (int i = 0; i < TIME_STEPS; i++) {
+            v0[i][TIME_STEPS - 1] = 0.0;
+            v1[i][TIME_STEPS - 1] = 0.0;//(1 - propCosts) * s[SPACE_STEPS - 1][i] - fixedCosts;
         }
     }
 
     private void processArrays() {
-        for (int j = N - 2; j >= 0; j--)
+        for (int j = TIME_STEPS - 2; j >= 0; j--)
             for (int i = 0; i <= j; i++) {
                 Double m1 = f(v0[i][j + 1], v0[i + 1][j + 1]);
                 Double n1 = f(v1[i][j + 1], v1[i + 1][j + 1]);
@@ -67,6 +71,14 @@ public class SimpleAlgorithm {
 
     Double f(Double v, Double v1) {
         return p * v + q * v1;
+    }
+
+    public void setMu(Double my) {
+        this.mu = mu;
+    }
+
+    public void setSigma(Double sigma) {
+        this.sigma = sigma;
     }
 
     public Number[][] getS() {
