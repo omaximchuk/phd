@@ -3,16 +3,16 @@ import java.math.RoundingMode;
 
 import static java.lang.Math.max;
 import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class Algorithm {
 
-    Double s0 = 1.0;
-    Double fixedCosts = 0.1;
-    Double propCosts = 0.09;
+    Double fixedCosts = 0.01;
+    Double propCosts = 0.0;
     Double time = 1.0;
-    Double space = 1.0;
+    Double space = 5.0;
     Integer N = 400;
-    Integer M = 20;
+    Integer M = 50;
     Double[][] v1 = new Double[N][M];
     Double[][] v0 = new Double[N][M];
     Double[][] s = new Double[N][M];
@@ -20,7 +20,7 @@ public class Algorithm {
     Integer[][] u1 = new Integer[N][M];
     private Double deltaT = time / N;
     private Double deltaS = space / M;
-    private Double mu = 0.5;
+    private Double mu = 0.4;
     private Double sigma = 0.4;
 
     public Algorithm() {
@@ -30,10 +30,9 @@ public class Algorithm {
     }
 
     private void initArrays() {
-        s[0][0] = s0;
         for (int i = 0; i < N; i++)
             for (int j = 0; j < M; j++) {
-                s[i][j] = deltaS * j;
+                s[i][j] = j * deltaS;
                 u0[i][j] = 0;
                 u1[i][j] = 0;
             }
@@ -94,6 +93,10 @@ public class Algorithm {
         return sigma;
     }
 
+    public Number[][] getV1() {
+        return v1;
+    }
+
     public Integer getN() {
         return N;
     }
@@ -119,10 +122,10 @@ public class Algorithm {
             System.out.print("i = " + (i + 1) + ":  ");
             for (int j = 0; j < M; j++) {
                 String space = (array[i][j].doubleValue() < 0) ? " " : "  ";
-                    if (array[i][j] instanceof Double)
-                        System.out.print(BigDecimal.valueOf((Double) array[i][j]).setScale(2, RoundingMode.HALF_UP) + space);
-                    else
-                        System.out.print(array[i][j] + space);
+                if (array[i][j] instanceof Double)
+                    System.out.print(BigDecimal.valueOf((Double) array[i][j]).setScale(2, RoundingMode.HALF_UP) + space);
+                else
+                    System.out.print(array[i][j] + space);
             }
             System.out.println();
         }

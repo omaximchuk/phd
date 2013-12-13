@@ -11,10 +11,10 @@ import static java.lang.Math.max;
 public class Main {
 
     public static void main(String[] args) {
-//        SimpleAlgorithm a = new SimpleAlgorithm();
-//        a.printArray(a.getU0());
+//        SimpleAlgorithm up = new SimpleAlgorithm();
+//        up.printArray(up.getU0());
 //        System.out.println();
-//        a.printArray(a.getU1());
+//        up.printArray(up.getU1());
 
         Algorithm a = new Algorithm();
         a.printArray(a.getU0());
