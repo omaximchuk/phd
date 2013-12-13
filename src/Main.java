@@ -11,14 +11,20 @@ import static java.lang.Math.max;
 public class Main {
 
     public static void main(String[] args) {
-//        SimpleAlgorithm up = new SimpleAlgorithm();
-//        up.printArray(up.getU0());
-//        System.out.println();
-//        up.printArray(up.getU1());
+        SimpleAlgorithm simpleAlgorithm = new SimpleAlgorithm();
+        Algorithm algorithm = new Algorithm();
 
-        Algorithm a = new Algorithm();
-        a.printArray(a.getU0());
+        simpleAlgorithm.setMu(algorithm.getMu());
+        simpleAlgorithm.setSigma(algorithm.getSigma());
+
+//        simpleAlgorithm.printArray(simpleAlgorithm.getU0());
+//        System.out.println();
+//        simpleAlgorithm.printArray(simpleAlgorithm.getU1());
+
+        System.out.println("space step = " + algorithm.SPACE_STEPS);
+        System.out.println(" time step = " + algorithm.TIME_STEPS);
+        algorithm.printArray(algorithm.getU0());
         System.out.println();
-        a.printArray(a.getU1());
+        algorithm.printArray(algorithm.getU1());
     }
 }
