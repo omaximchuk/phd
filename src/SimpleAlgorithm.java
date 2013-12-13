@@ -34,7 +34,7 @@ public class SimpleAlgorithm {
             }
         for (int i = 0; i < N; i++) {
             v0[i][N - 1] = 0.0;
-            v1[i][N - 1] = 0.0;//(1 - propCosts) * s[N-1][i] - fixedCosts;
+            v1[i][N - 1] = 0.0;//(1 - propCosts) * s[SPACE_STEPS-1][i] - fixedCosts;
         }
     }
 
