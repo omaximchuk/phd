@@ -1,29 +1,35 @@
 
 import static java.lang.Math.max;
+import static java.lang.Math.sqrt;
 
 
 public class SimpleAlgorithm {
 
-    Double s0 = 1.0;
-    Double fixedCosts = 0.0;
-    Double p = 0.9;
-    Double q = 1 - p;
-    Double up = 1.1;
-    Double down = 0.5;
-    Double propCosts = 0.01;
-    Integer TIME_STEPS = 10;
+    private Double s0 = 1.0;
+    private Double propCosts = 0.01;
+    private Double fixedCosts = 0.1;
+    private Double p = 0.9;
+    private Double q = 1 - p;
+    private Integer TIME_STEPS = 33;
 
-    Double mu;
-    Double sigma;
+    private Double mu;
+    private Double sigma;
+    private Double deltaT;
 
-    Double[][] v1 = new Double[TIME_STEPS + 1][TIME_STEPS];
-    Double[][] v0 = new Double[TIME_STEPS + 1][TIME_STEPS];
-    Double[][] s = new Double[TIME_STEPS + 1][TIME_STEPS];
-    Integer[][] u0 = new Integer[TIME_STEPS + 1][TIME_STEPS];
-    Integer[][] u1 = new Integer[TIME_STEPS + 1][TIME_STEPS];
+    private Double[][] v1 = new Double[TIME_STEPS + 1][TIME_STEPS];
+    private Double[][] v0 = new Double[TIME_STEPS + 1][TIME_STEPS];
+    private Double[][] s = new Double[TIME_STEPS + 1][TIME_STEPS];
+    private Integer[][] u0 = new Integer[TIME_STEPS + 1][TIME_STEPS];
+    private Integer[][] u1 = new Integer[TIME_STEPS + 1][TIME_STEPS];
 
-    public SimpleAlgorithm() {
+
+    public SimpleAlgorithm(Algorithm algorithm) {
         super();
+        mu = algorithm.getMu();
+        sigma = algorithm.getSigma();
+        deltaT = algorithm.getDeltaT();
+        propCosts = algorithm.getProportionalCosts();
+        fixedCosts = algorithm.getFixedCosts();
         initArrays();
         processArrays();
     }
@@ -32,7 +38,7 @@ public class SimpleAlgorithm {
         s[0][0] = s0;
         for (int j = 1; j < TIME_STEPS; j++)
             for (int i = 0; i <= j; i++) {
-                s[i][j] = Math.pow(up, j - i) * Math.pow(down, i);
+                s[i][j] = Math.pow(up(mu, sigma, deltaT), j - i) * Math.pow(down(mu, sigma, deltaT), i);
                 u0[i][j] = 0;
                 u1[i][j] = 0;
             }
@@ -40,6 +46,14 @@ public class SimpleAlgorithm {
             v0[i][TIME_STEPS - 1] = 0.0;
             v1[i][TIME_STEPS - 1] = 0.0;//(1 - propCosts) * s[SPACE_STEPS - 1][i] - fixedCosts;
         }
+    }
+
+    private Double down(Double mu, Double sigma, Double deltaT) {
+        return 1 + mu * deltaT - sigma * sqrt(deltaT);
+    }
+
+    private Double up(Double mu, Double sigma, Double deltaT) {
+        return 1 + mu * deltaT + sigma * sqrt(deltaT);
     }
 
     private void processArrays() {
@@ -101,4 +115,7 @@ public class SimpleAlgorithm {
         return v0;
     }
 
+    public void setDeltaT(Double deltaT) {
+        this.deltaT = deltaT;
+    }
 }
