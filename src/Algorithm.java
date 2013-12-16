@@ -5,26 +5,26 @@ import static java.lang.Math.*;
 
 public class Algorithm {
 
-    Double fixedCosts = 0.01;
-    Double propCosts = 0.0;
+    private Double fixedCosts = 0.01;
+    private Double propCosts = 0.0;
 
     private Double mu = 0.4;
     private Double sigma = 0.2;
 
-    Double TIME_INTERVAL = 1.0;
-    Double SPACE_INTERVAL = 5.0;
+    private Double TIME_INTERVAL = 1.0;
+    private Double SPACE_INTERVAL = 5.0;
 
     private Double deltaT = 0.03;
     private Double deltaS = sigma*sqrt(deltaT) + .0001;
 
-    Integer TIME_STEPS = (int)floor(TIME_INTERVAL/deltaT);
-    Integer SPACE_STEPS = (int)floor(SPACE_INTERVAL/deltaS);
+    private Integer TIME_STEPS = (int)floor(TIME_INTERVAL/deltaT);
+    private Integer SPACE_STEPS = (int)floor(SPACE_INTERVAL/deltaS);
 
-    Double[][] v1 = new Double[SPACE_STEPS][TIME_STEPS];
-    Double[][] v0 = new Double[SPACE_STEPS][TIME_STEPS];
-    Double[][] s = new Double[SPACE_STEPS][TIME_STEPS];
-    Integer[][] u0 = new Integer[SPACE_STEPS][TIME_STEPS];
-    Integer[][] u1 = new Integer[SPACE_STEPS][TIME_STEPS];
+    private Double[][] v1 = new Double[SPACE_STEPS][TIME_STEPS];
+    private Double[][] v0 = new Double[SPACE_STEPS][TIME_STEPS];
+    private Double[][] s = new Double[SPACE_STEPS][TIME_STEPS];
+    private Integer[][] u0 = new Integer[SPACE_STEPS][TIME_STEPS];
+    private Integer[][] u1 = new Integer[SPACE_STEPS][TIME_STEPS];
 
 
 
@@ -142,5 +142,17 @@ public class Algorithm {
 
     public Double getSigma() {
         return sigma;
+    }
+
+    public Double getDeltaT() {
+        return deltaT;
+    }
+
+    public Double getProportionalCosts() {
+        return propCosts;
+    }
+
+    public Double getFixedCosts() {
+        return fixedCosts;
     }
 }
