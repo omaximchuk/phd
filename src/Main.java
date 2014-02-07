@@ -1,27 +1,23 @@
-import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.MultiColorScatter;
-
-import static java.lang.Math.max;
-
 public class Main {
 
     public static void main(String[] args) {
         Algorithm algorithm = new Algorithm();
-        SimpleAlgorithm simpleAlgorithm = new SimpleAlgorithm(algorithm);
+        Double time_interval = algorithm.getTIME_INTERVAL();
+        SimpleAlgorithm simpleAlgorithm = new SimpleAlgorithm(algorithm, .2*time_interval, .8*time_interval);
 
-        simpleAlgorithm.printArray(simpleAlgorithm.getU0());
-        System.out.println();
-        simpleAlgorithm.printArray(simpleAlgorithm.getU1());
+        showInitialConditions(algorithm);
 
-        System.out.println(" time step = " + algorithm.getTIME_STEPS());
-        System.out.println("space step = " + algorithm.getSPACE_STEPS());
-        algorithm.printArray(algorithm.getU0());
+        simpleAlgorithm.printControlArray(simpleAlgorithm.getU0());
         System.out.println();
-        algorithm.printArray(algorithm.getU1());
+        simpleAlgorithm.printControlArray(simpleAlgorithm.getU1());
+    }
+
+    private static void showInitialConditions(Algorithm algorithm) {
+        System.out.println("time interval = " + algorithm.getTIME_INTERVAL());
+        System.out.println("delta t = " + algorithm.getDeltaT());
+        System.out.println("# time steps = " + algorithm.getTIME_STEPS());
+        System.out.println("space interval = " + algorithm.getSPACE_INTERVAL());
+        System.out.println("delta s = " + algorithm.getDeltaS());
+        System.out.println("# space steps = " + algorithm.getSPACE_STEPS());
     }
 }

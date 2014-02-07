@@ -6,18 +6,19 @@ import static java.lang.Math.*;
 public class Algorithm {
 
     private Double fixedCosts = 0.01;
-    private Double propCosts = 0.0;
+    private Double propCosts = 0.01;
 
     private Double mu = 0.4;
     private Double sigma = 0.2;
 
-    private Double TIME_INTERVAL = 1.0;
-    private Double SPACE_INTERVAL = 5.0;
+    private static Double TIME_INTERVAL = 1.0;
+    private Double SPACE_INTERVAL = 50.0;
 
-    private Double deltaT = 0.03;
-    private Double deltaS = sigma*sqrt(deltaT) + .0001;
+    private static Double deltaT = 0.03;
+    private double h = sigma * sqrt(deltaT);
+    private Double deltaS = exp(h);
 
-    private Integer TIME_STEPS = (int)floor(TIME_INTERVAL/deltaT);
+    public static Integer TIME_STEPS = (int)floor(TIME_INTERVAL/deltaT);
     private Integer SPACE_STEPS = (int)floor(SPACE_INTERVAL/deltaS);
 
     private Double[][] v1 = new Double[SPACE_STEPS][TIME_STEPS];
@@ -37,7 +38,7 @@ public class Algorithm {
     private void initArrays() {
         for (int i = 0; i < SPACE_STEPS; i++)
             for (int j = 0; j < TIME_STEPS; j++) {
-                s[i][j] = i * deltaS;
+                s[i][j] = exp(i*h);
                 u0[i][j] = 0;
                 u1[i][j] = 0;
             }
@@ -154,5 +155,21 @@ public class Algorithm {
 
     public Double getFixedCosts() {
         return fixedCosts;
+    }
+
+    public Double getTIME_INTERVAL() {
+        return TIME_INTERVAL;
+    }
+
+    public Double getSPACE_INTERVAL() {
+        return SPACE_INTERVAL;
+    }
+
+    public Double getDeltaS() {
+        return deltaS;
+    }
+
+    public Double getH() {
+        return h;
     }
 }
