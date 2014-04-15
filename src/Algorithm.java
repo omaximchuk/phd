@@ -6,15 +6,15 @@ import static java.lang.Math.*;
 public class Algorithm {
 
     private Double fixedCosts = 0.01;
-    private Double propCosts = 0.01;
+    private Double propCosts = 0.00;
 
     private Double mu = 0.4;
-    private Double sigma = 0.2;
+    private Double sigma = 0.4;
 
-    private static Double TIME_INTERVAL = 1.0;
+    public static Double TIME_INTERVAL = 1.0;
     private Double SPACE_INTERVAL = 50.0;
 
-    private static Double deltaT = 0.03;
+    private static Double deltaT = 0.01;
     private double h = sigma * sqrt(deltaT);
     private Double deltaS = exp(h);
 
