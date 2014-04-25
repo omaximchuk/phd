@@ -2,19 +2,13 @@ public class Main {
 
 
     public static void main(String[] args) {
-        BinaryAlgorithmRectangle r = new BinaryAlgorithmRectangle(1.0);
-        r.printArray(r.getU1());
-    }
+        Algorithm r = new BinaryAlgorithmRectangle();
+        r.printU0();
 
-    private static void showInitialConditions(Algorithm algorithm) {
-        System.out.println("time interval = " + algorithm.getTIME_INTERVAL());
-        System.out.println("delta t = " + algorithm.getDeltaT());
-        System.out.println("# time steps = " + algorithm.getTIME_STEPS());
-        System.out.println("space interval = " + algorithm.getSPACE_INTERVAL());
-        System.out.println("delta s = " + algorithm.getDeltaS());
-        System.out.println("# space steps = " + algorithm.getSPACE_STEPS());
-        System.out.println("sigma = " + algorithm.getSigma());
-        System.out.println("mu = " + algorithm.getMu());
+        System.out.println("\n\n\n");
+
+        Algorithm t = new BinaryAlgorithm();
+        t.printU0();
     }
 
     static void compareAndPrintFirst(BinaryAlgorithm s1, BinaryAlgorithm s2) {

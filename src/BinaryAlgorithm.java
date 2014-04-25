@@ -4,7 +4,7 @@ import java.math.RoundingMode;
 import static java.lang.Math.*;
 
 
-public class BinaryAlgorithm {
+public class BinaryAlgorithm implements Algorithm {
 
     private Double mu = Conditions.mu;
     private Double sigma = Conditions.sigma;
@@ -53,7 +53,7 @@ public class BinaryAlgorithm {
         s[0][0] = s0;
         for (int j = 1; j < TIME_STEPS; j++)
             for (int i = 0; i <= j; i++) {
-                s[i][j] = s0*pow(up(mu, sigma, deltaT), j - i) * pow(down(mu, sigma, deltaT), i);
+                s[i][j] = s0*pow(up(), j - i) * pow(down(), i);
                 u0[i][j] = 0;
                 u1[i][j] = 0;
             }
@@ -64,12 +64,12 @@ public class BinaryAlgorithm {
         }
     }
 
-    private Double down(Double mu, Double sigma, Double deltaT) {
-        return 1 / up(mu, sigma, deltaT);
+    private Double down() {
+        return 1 / up();
         //return 1 + mu * deltaT - sigma * sqrt(deltaT);
     }
 
-    private Double up(Double mu, Double sigma, Double deltaT) {
+    private Double up() {
         return exp(h);
         //return 1 + mu * deltaT + sigma * sqrt(deltaT);
     }
@@ -101,7 +101,7 @@ public class BinaryAlgorithm {
                 }
     }
 
-    public void printControlArray(Number[][] array) {
+    private void printControlArray(Number[][] array) {
         for (int j = array.length - 2; j >= 0; j--) {
             printInfo(array, j);
             for (int i = j; i >= 0; i--)
@@ -113,7 +113,7 @@ public class BinaryAlgorithm {
         }
     }
 
-    public void printArray(Number[][] array) {
+    private void printArray(Number[][] array) {
         for (int j = array.length - 2; j >= 0; j--) {
             printInfo(array, j);
             for (int i = j; i >= 0; i--)
@@ -156,6 +156,31 @@ public class BinaryAlgorithm {
         System.out.print("time step = " + (j + 1) + ":" + new String(new char[array.length - j]).replace("\0", "  "));
     }
 
+    @Override
+    public void printU0() {
+        printControlArray(u0);
+    }
+
+    @Override
+    public void printU1() {
+        printControlArray(u1);
+    }
+
+    @Override
+    public void printPrice() {
+        printArray(s);
+    }
+
+    @Override
+    public void printV0() {
+        printArray(v0);
+    }
+
+    @Override
+    public void printV1() {
+        printArray(v1);
+    }
+
     public void printEdgePrice() {
         System.out.println("Edge price on [0, " + TIME_INTERVAL + "] interval");
         for (int i = 0; i < edgePrice.length; i++)
@@ -166,38 +191,12 @@ public class BinaryAlgorithm {
         return p * v + q * v1;
     }
 
-    public void setMu(Double my) {
-        this.mu = mu;
-    }
-
-    public void setSigma(Double sigma) {
-        this.sigma = sigma;
-    }
-
     public Double[][] getS() {
         return s;
-    }
-    public Double getS0() {
-        return s0;
     }
 
     public Number[][] getU0() {
         return u0;
     }
 
-    public Number[][] getU1() {
-        return u1;
-    }
-
-    public Number[][] getV1() {
-        return v1;
-    }
-
-    public Number[][] getV0() {
-        return v0;
-    }
-
-    public void setDeltaT(Double deltaT) {
-        this.deltaT = deltaT;
-    }
 }

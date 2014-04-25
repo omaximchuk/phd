@@ -4,7 +4,7 @@ import java.math.RoundingMode;
 import static java.lang.Math.*;
 
 
-public class BinaryAlgorithmRectangle {
+public class BinaryAlgorithmRectangle implements Algorithm {
 
     private Double mu = Conditions.mu;
     private Double sigma = Conditions.sigma;
@@ -28,9 +28,8 @@ public class BinaryAlgorithmRectangle {
     private Integer[][] u1 = new Integer[SPACE_STEPS][TIME_STEPS];
     private BigDecimal[] edgePrice = new BigDecimal[TIME_STEPS];
 
-    public BinaryAlgorithmRectangle(Double s0) {
+    public BinaryAlgorithmRectangle() {
         super();
-        this.s0 = s0;
         initArrays();
         processArrays();
         detectPriceSlope();
@@ -47,13 +46,13 @@ public class BinaryAlgorithmRectangle {
             v0[i][0] = 0.0;
             v1[i][0] = -fixedCosts;
             v0[i][TIME_STEPS - 1] = 0.0;
-            v1[i][TIME_STEPS - 1] = 0.0;//(1 - propCosts) * s[i][TIME_STEPS - 1] - fixedCosts;
+            v1[i][TIME_STEPS - 1] = (1 - propCosts) * s[i][TIME_STEPS - 1] - fixedCosts;
         }
         for (int j = 0; j < TIME_STEPS; j++) {
             v0[0][j] = 0.0;
             v1[0][j] = -fixedCosts;
             v0[SPACE_STEPS - 1][j] = 0.0;
-            v1[SPACE_STEPS - 1][j] = 0.0;
+            v1[SPACE_STEPS - 1][j] = (1 - propCosts) * s[SPACE_STEPS - 1][j] - fixedCosts;
             edgePrice[j] = BigDecimal.ZERO;
         }
     }
@@ -70,15 +69,15 @@ public class BinaryAlgorithmRectangle {
 
     private void processArrays() {
         for (int j = TIME_STEPS - 2; j >= 0; j--)
-            for (int i = 0; i < SPACE_STEPS - 1; i++) {
-                Double m1 = f(v0[i][j + 1], v0[i + 1][j + 1]);
-                Double n1 = f(v1[i][j + 1], v1[i + 1][j + 1]);
+            for (int i = 1; i < SPACE_STEPS - 1; i++) {
+                Double m1 = f(v0[i - 1][j + 1], v0[i + 1][j + 1]);
+                Double n1 = f(v1[i - 1][j + 1], v1[i + 1][j + 1]);
                 Double m2 = (-1 - propCosts) * s[i][j] - fixedCosts + n1;
                 Double n2 = (1 - propCosts) * s[i][j] - fixedCosts + m1;
-                v0[i + 1][j] = Math.max(m1, m2);
-                v1[i + 1][j] = Math.max(n1, n2);
-                u0[i + 1][j] = m1 > m2 ? 0 : -1;
-                u1[i + 1][j] = n1 > n2 ? 0 : 1;
+                v0[i][j] = Math.max(m1, m2);
+                v1[i][j] = Math.max(n1, n2);
+                u0[i][j] = m1 > m2 ? 0 : -1;
+                u1[i][j] = n1 > n2 ? 0 : 1;
             }
     }
 
@@ -95,10 +94,18 @@ public class BinaryAlgorithmRectangle {
                 }
     }
 
-    public void printControlArray(Integer[][] array) {
+    public void printU0() {
+        printControlArray(u0);
+    }
+
+    public void printU1() {
+        printControlArray(u1);
+    }
+
+    private void printControlArray(Integer[][] array) {
         for (int j = TIME_STEPS - 2; j >= 0; j--) {
-            printInfo(array, j);
-            for (int i = 0; i < SPACE_STEPS; i++)
+            printInfo(j);
+            for (int i = SPACE_STEPS-1; i >= 0; i--)
                 if (array[i][j].doubleValue() >= 0)
                     System.out.print(" " + array[i][j] + " | ");
                 else
@@ -107,10 +114,22 @@ public class BinaryAlgorithmRectangle {
         }
     }
 
-    public void printArray(Number[][] array) {
+    public void printPrice() {
+        printArray(s);
+    }
+
+    public void printV0() {
+        printArray(v0);
+    }
+
+    public void printV1() {
+        printArray(v1);
+    }
+
+    private void printArray(Number[][] array) {
         for (int j = TIME_STEPS - 1; j >= 0; j--) {
-            printInfo(array, j);
-            for (int i = 0; i < SPACE_STEPS; i++)
+            printInfo(j);
+            for (int i = SPACE_STEPS - 1; i >= 0; i--)
                 if (array[i][j].doubleValue() >= 0)
                     System.out.print(" " + getBigDecimalFrom(array[i][j]) + " | ");
                 else
@@ -130,23 +149,11 @@ public class BinaryAlgorithmRectangle {
         return BigDecimal.valueOf(result.doubleValue()).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public void printWholeArray(Number[][] array) {
-        for (int j = array.length - 2; j >= 0; j--) {
-            //System.out.print("time step = " + (j + 1) + ": ");
-            for (int i = array.length - 1; i >= 0; i--)
-                if (array[i][j] == null)
-                    System.out.print(new BigDecimal(0.0).setScale(2, RoundingMode.HALF_UP) + " | ");
-                else
-                    System.out.print(BigDecimal.valueOf(array[i][j].doubleValue()).setScale(2, RoundingMode.HALF_UP) + " | ");
-            System.out.println();
-        }
-    }
-
     public static BigDecimal getBigDecimalFrom(Number number) {
         return BigDecimal.valueOf(number.doubleValue()).setScale(2, RoundingMode.HALF_UP);
     }
 
-    private void printInfo(Number[][] array, int j) {
+    private void printInfo(int j) {
         System.out.print("time step = " + (j + 1) + ":\t\t\t");
     }
 
@@ -160,47 +167,4 @@ public class BinaryAlgorithmRectangle {
         return p * v + q * v1;
     }
 
-    public void setMu(Double my) {
-        this.mu = mu;
-    }
-
-    public void setSigma(Double sigma) {
-        this.sigma = sigma;
-    }
-
-    public Double[][] getS() {
-        return s;
-    }
-
-    public Double getS0() {
-        return s0;
-    }
-
-    public Integer[][] getU0() {
-        return u0;
-    }
-
-    public Integer[][] getU1() {
-        return u1;
-    }
-
-    public Number[][] getV1() {
-        return v1;
-    }
-
-    public Number[][] getV0() {
-        return v0;
-    }
-
-    public void setDeltaT(Double deltaT) {
-        this.deltaT = deltaT;
-    }
-
-    public Double getH() {
-        return h;
-    }
-
-    public Integer getSpaceSteps() {
-        return SPACE_STEPS;
-    }
 }
