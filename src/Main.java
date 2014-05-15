@@ -6,9 +6,10 @@ public class Main {
         r.printU0();
 
         System.out.println("\n\n\n");
+        r.printPrice();
 
-        Algorithm t = new BinaryAlgorithm();
-        t.printU0();
+//        Algorithm t = new BinaryAlgorithm();
+//        t.printU0();
     }
 
     static void compareAndPrintFirst(BinaryAlgorithm s1, BinaryAlgorithm s2) {

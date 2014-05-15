@@ -2,7 +2,7 @@ import static java.lang.Math.*;
 
 public class Conditions {
 
-    public static Double mu = -0.4;
+    public static Double mu = 0.4;
     public static Double sigma = 0.8;
     public static Double deltaT = 0.01;
     public static Double h = sigma * sqrt(deltaT);
@@ -15,6 +15,6 @@ public class Conditions {
     public static Double TIME_INTERVAL = 1.0;
     public static Integer TIME_STEPS = (int) floor(TIME_INTERVAL / deltaT);
     public static Double SPACE_INTERVAL = 10.0;
-    public static Integer SPACE_STEPS = TIME_STEPS + 1;
+    public static Integer SPACE_STEPS = 2 * TIME_STEPS ;
 
 }
