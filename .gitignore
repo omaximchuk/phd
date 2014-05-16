@@ -14,16 +14,6 @@
 .idea/uiDesigner.xml
 .idea/vcs.xml
 .idea/workspace.xml
-out/production/CCApplication/ContinuousAlgorithm.class
-out/production/CCApplication/Main.class
-out/production/CCApplication/BinaryAlgorithm.class
-out/production/CCApplication/WdsUnattendTemplate.xml
-out/production/PhD/ContinuousAlgorithm.class
-out/production/PhD/Main.class
-out/production/PhD/BinaryAlgorithm.class
 PhD.iml
 *.class
-*.class
-out/production/PhD/BinaryAlgorithmRectangle.class
-out/production/PhD/Conditions.class
-*.class
+*.xml
