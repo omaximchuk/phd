@@ -18,3 +18,5 @@ PhD.iml
 *.class
 *.xml
 out/*.*
+out/production/PhD/BinaryAlgorithmRectangle.class
+out/production/PhD/Conditions.class
