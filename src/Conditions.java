@@ -15,6 +15,6 @@ public class Conditions {
     public static Double TIME_INTERVAL = 1.0;
     public static Integer TIME_STEPS = (int) floor(TIME_INTERVAL / deltaT);
     public static Double SPACE_INTERVAL = 10.0;
-    public static Integer SPACE_STEPS = 2 * TIME_STEPS ;
+    public static Integer SPACE_STEPS = 2 * TIME_STEPS - 1;
 
 }

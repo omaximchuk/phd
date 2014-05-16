@@ -3,7 +3,7 @@ public class Main {
 
     public static void main(String[] args) {
         Algorithm r = new BinaryAlgorithmRectangle();
-        r.printU0();
+        //r.printU0();
 
         System.out.println("\n\n\n");
         r.printPrice();

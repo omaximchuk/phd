@@ -24,8 +24,8 @@ public class BinaryAlgorithmRectangle implements Algorithm {
     private Double[][] v1 = new Double[SPACE_STEPS][TIME_STEPS];
     private Double[][] v0 = new Double[SPACE_STEPS][TIME_STEPS];
     private Double[][] s = new Double[SPACE_STEPS][TIME_STEPS];
-    private Integer[][] u0 = new Integer[SPACE_STEPS][TIME_STEPS];
-    private Integer[][] u1 = new Integer[SPACE_STEPS][TIME_STEPS];
+    private int[][] u0 = new int[SPACE_STEPS][TIME_STEPS];
+    private int[][] u1 = new int[SPACE_STEPS][TIME_STEPS];
     private BigDecimal[] edgePrice = new BigDecimal[TIME_STEPS];
 
     public BinaryAlgorithmRectangle() {
@@ -36,12 +36,15 @@ public class BinaryAlgorithmRectangle implements Algorithm {
     }
 
     private void initArrays() {
-        for (int j = 0; j < TIME_STEPS; j++)
-            for (int i = 0; i < SPACE_STEPS; i++) {
-                s[i][j] = s0 * pow(up(), SPACE_STEPS - i) * pow(down(), i);
-                u0[i][j] = 0;
-                u1[i][j] = 0;
+        for (int j = 0; j < TIME_STEPS; j++) {
+            int middle = (SPACE_STEPS + 1) / 2 - 1;
+            s[middle][j] = s0;
+            for (int i = 1; i <= middle; i++) {
+                //s[i][j] = s0 * pow(up(), SPACE_STEPS - i) * pow(down(), i);
+                s[middle - i][j] = pow(up(), i);
+                s[middle + i][j] = pow(down(), i);
             }
+        }
         for (int i = 0; i < SPACE_STEPS; i++) {
             v0[i][0] = 0.0;
             v1[i][0] = -fixedCosts;
@@ -102,11 +105,11 @@ public class BinaryAlgorithmRectangle implements Algorithm {
         printControlArray(u1);
     }
 
-    private void printControlArray(Integer[][] array) {
+    private void printControlArray(int[][] array) {
         for (int j = TIME_STEPS - 2; j >= 0; j--) {
             printInfo(j);
             for (int i = SPACE_STEPS-1; i >= 0; i--)
-                if (array[i][j].doubleValue() >= 0)
+                if (array[i][j] >= 0)
                     System.out.print(" " + array[i][j] + ":" + i + " | ");
                 else
                     System.out.print(array[i][j] + ":" + i + " | ");
@@ -131,9 +134,9 @@ public class BinaryAlgorithmRectangle implements Algorithm {
             printInfo(j);
             for (int i = SPACE_STEPS - 1; i >= 0; i--)
                 if (array[i][j].doubleValue() >= 0)
-                    System.out.print(" " + getBigDecimalFrom(array[i][j]) + ":" + i + " | ");
+                    System.out.print(" " + getBigDecimalFrom(array[i][j]) + ":" + (i + 1) + " | ");
                 else
-                    System.out.print(getBigDecimalFrom(array[i][j]) + ":" + i + " | ");
+                    System.out.print(getBigDecimalFrom(array[i][j]) + ":" + (i + 1) + " | ");
             System.out.println();
         }
     }
