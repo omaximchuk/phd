@@ -109,12 +109,23 @@ public class BinaryAlgorithmRectangle implements Algorithm {
         for (int j = TIME_STEPS - 2; j >= 0; j--) {
             printInfo(j);
             for (int i = SPACE_STEPS-1; i >= 0; i--)
-                if (array[i][j] >= 0)
-                    System.out.print(" " + array[i][j] + ":" + i + " | ");
-                else
-                    System.out.print(array[i][j] + ":" + i + " | ");
+                printControlElementWithIndex(array[i][j], i);
             System.out.println();
         }
+    }
+
+    private void printControlElementWithIndex(int el, int i) {
+        if (el >= 0)
+            System.out.print(" " + el + ":" + i + " | ");
+        else
+            System.out.print(el + ":" + i + " | ");
+    }
+
+    private void printControlElement(int el) {
+        if (el >= 0)
+            System.out.print(" " + el + " | ");
+        else
+            System.out.print(el + ":" + " | ");
     }
 
     public void printPrice() {
@@ -133,12 +144,65 @@ public class BinaryAlgorithmRectangle implements Algorithm {
         for (int j = TIME_STEPS - 1; j >= 0; j--) {
             printInfo(j);
             for (int i = SPACE_STEPS - 1; i >= 0; i--)
-                if (array[i][j].doubleValue() >= 0)
-                    System.out.print(" " + getBigDecimalFrom(array[i][j]) + ":" + (i + 1) + " | ");
-                else
-                    System.out.print(getBigDecimalFrom(array[i][j]) + ":" + (i + 1) + " | ");
+                printElementWithIndex(array[i][j], i);
             System.out.println();
         }
+    }
+
+    public void printTreePrice() {
+        printArrayLikeTree(s);
+    }
+
+    public void printTreeU0() {
+        printControlArrayLikeTree(u0);
+    }
+
+    public void printTreeU1() {
+        printControlArrayLikeTree(u1);
+    }
+
+    public void printTreeV0() {
+        printArrayLikeTree(v0);
+    }
+
+    public void printTreeV1() {
+        printArrayLikeTree(v1);
+    }
+
+    private void printArrayLikeTree(Number[][] array) {
+        for (int j = TIME_STEPS - 1; j >= 0; j--) {
+            printTreeInfo(j);
+            for (int i = TIME_STEPS - 1 - j; i < SPACE_STEPS - 1 - j; i += 2)
+                printElementWithIndex(array[SPACE_STEPS - 1 - i][j], i);
+            System.out.println();
+        }
+    }
+
+    private void printControlArrayLikeTree(int[][] array) {
+        for (int j = TIME_STEPS - 2; j >= 0; j--) {
+            printTreeInfo(j);
+            for (int i = TIME_STEPS - 1 - j; i < SPACE_STEPS - 1 - j; i += 2)
+                printControlElementWithIndex(array[SPACE_STEPS - 1 - i][j],SPACE_STEPS - 1 - i);
+            System.out.println();
+        }
+    }
+
+    private void printElementWithIndex(Number number, int i) {
+        if (number.doubleValue() >= 0)
+            System.out.print(" " + getBigDecimalFrom(number) + ":" + (i + 1) + " | ");
+        else
+            System.out.print(getBigDecimalFrom(number) + ":" + (i + 1) + " | ");
+    }
+
+    private void printElement(Number number) {
+        if (number.doubleValue() >= 0)
+            System.out.print(" " + getBigDecimalFrom(number) + " | ");
+        else
+            System.out.print(getBigDecimalFrom(number) + " | ");
+    }
+
+    private void printTreeInfo(int j) {
+        System.out.print("time step = " + (j + 1) + ":" + new String(new char[TIME_STEPS - j]).replace("\0", "  "));
     }
 
     public void printAnalyticalLine() {

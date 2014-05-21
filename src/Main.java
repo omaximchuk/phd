@@ -2,14 +2,15 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Algorithm r = new BinaryAlgorithmRectangle();
-        //r.printU0();
+        BinaryAlgorithmRectangle r = new BinaryAlgorithmRectangle();
 
         System.out.println("\n\n\n");
-        r.printPrice();
+        //r.printTreePrice();
+        r.printU0();
+        r.printTreeU0();
 
-//        Algorithm t = new BinaryAlgorithm();
-//        t.printU0();
+        Algorithm t = new BinaryAlgorithm();
+        t.printU0();
     }
 
     static void compareAndPrintFirst(BinaryAlgorithm s1, BinaryAlgorithm s2) {

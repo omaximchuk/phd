@@ -106,9 +106,9 @@ public class BinaryAlgorithm implements Algorithm {
             printInfo(array, j);
             for (int i = j; i >= 0; i--)
                 if (array[i][j].doubleValue() >= 0)
-                    System.out.print((j != i) ? " " + array[i][j] + " | " : " " + array[i][j]);
+                    System.out.print((j != i) ? " " + array[i][j] + ":" + (i+1) + " | " : " " + array[i][j] + ":" + (i+1));
                 else
-                    System.out.print((j != i) ? array[i][j] + " | " : array[i][j]);
+                    System.out.print((j != i) ? array[i][j] + ":" + (i+1)+  " | " : array[i][j] + ":" + (i+1));
             System.out.println();
         }
     }
@@ -118,9 +118,9 @@ public class BinaryAlgorithm implements Algorithm {
             printInfo(array, j);
             for (int i = j; i >= 0; i--)
                 if (array[i][j].doubleValue() >= 0)
-                    System.out.print((j != i) ? " " + getBigDecimalFrom(array[i][j]) + " | " : " " + getBigDecimalFrom(array[i][j]));
+                    System.out.print((j != i) ? " " + getBigDecimalFrom(array[i][j]) +  ":" + (i + 1) + " | " : " " + getBigDecimalFrom(array[i][j])+ ":" + (i + 1));
                 else
-                    System.out.print((j != i) ? getBigDecimalFrom(array[i][j]) + " | " : getBigDecimalFrom(array[i][j]));
+                    System.out.print((j != i) ? "" + getBigDecimalFrom(array[i][j]) + ":" + (i + 1)  + " | " : "" + getBigDecimalFrom(array[i][j]) + ":" + (i + 1));
             System.out.println();
         }
     }
