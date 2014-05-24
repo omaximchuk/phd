@@ -3,12 +3,13 @@ public class Main {
 
     public static void main(String[] args) {
         BinaryAlgorithmRectangle r = new BinaryAlgorithmRectangle();
-
-        System.out.println("\n\n\n");
-        //r.printTreePrice();
-        r.printU0();
+//        r.printTreePrice();
+        //r.printU0();
+        System.out.println("\n");
         r.printTreeU0();
+//        r.printTreeV0();
 
+        System.out.println("\n");
         Algorithm t = new BinaryAlgorithm();
         t.printU0();
     }

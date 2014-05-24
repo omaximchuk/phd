@@ -71,7 +71,8 @@ public class BinaryAlgorithmRectangle implements Algorithm {
     }
 
     private void processArrays() {
-        for (int j = TIME_STEPS - 2; j >= 0; j--)
+        for (int j = TIME_STEPS - 2; j >= 0; j--) {
+            //System.out.print("time step = " + j + "   ");
             for (int i = 1; i < SPACE_STEPS - 1; i++) {
                 Double m1 = f(v0[i - 1][j + 1], v0[i + 1][j + 1]);
                 Double n1 = f(v1[i - 1][j + 1], v1[i + 1][j + 1]);
@@ -79,9 +80,13 @@ public class BinaryAlgorithmRectangle implements Algorithm {
                 Double n2 = (1 - propCosts) * s[i][j] - fixedCosts + m1;
                 v0[i][j] = Math.max(m1, m2);
                 v1[i][j] = Math.max(n1, n2);
+                //System.out.print("i = " + (i-1) + "; n1 = " + n1 + "::::");
+                //System.out.print("; n1 = " + n1 + "; n2 = " + n2 + "::::");
                 u0[i][j] = m1 > m2 ? 0 : -1;
                 u1[i][j] = n1 > n2 ? 0 : 1;
             }
+            //System.out.println();
+        }
     }
 
     private void detectPriceSlope() {
@@ -108,7 +113,7 @@ public class BinaryAlgorithmRectangle implements Algorithm {
     private void printControlArray(int[][] array) {
         for (int j = TIME_STEPS - 2; j >= 0; j--) {
             printInfo(j);
-            for (int i = SPACE_STEPS-1; i >= 0; i--)
+            for (int i = SPACE_STEPS - 1; i >= 0; i--)
                 printControlElementWithIndex(array[i][j], i);
             System.out.println();
         }
@@ -170,19 +175,27 @@ public class BinaryAlgorithmRectangle implements Algorithm {
     }
 
     private void printArrayLikeTree(Number[][] array) {
-        for (int j = TIME_STEPS - 1; j >= 0; j--) {
+        int T = TIME_STEPS - 1;
+        for (int j = T; j >= 0; j--) {
             printTreeInfo(j);
-            for (int i = TIME_STEPS - 1 - j; i < SPACE_STEPS - 1 - j; i += 2)
-                printElementWithIndex(array[SPACE_STEPS - 1 - i][j], i);
+            int S = SPACE_STEPS - T + j-1;
+            if(S == SPACE_STEPS)
+                S = SPACE_STEPS - 1;
+            for (int i = S; i >= T - j; i -= 2)
+                printElementWithIndex(array[i][j], i);
             System.out.println();
         }
     }
 
     private void printControlArrayLikeTree(int[][] array) {
-        for (int j = TIME_STEPS - 2; j >= 0; j--) {
+        int T = TIME_STEPS - 1;
+        for (int j = T; j >= 0; j--) {
             printTreeInfo(j);
-            for (int i = TIME_STEPS - 1 - j; i < SPACE_STEPS - 1 - j; i += 2)
-                printControlElementWithIndex(array[SPACE_STEPS - 1 - i][j],SPACE_STEPS - 1 - i);
+            int S = SPACE_STEPS - T + j-1;
+            if(S == SPACE_STEPS)
+                S = SPACE_STEPS - 1;
+            for (int i = S; i >= T - j; i -= 2)
+                printControlElementWithIndex(array[i][j], i);
             System.out.println();
         }
     }

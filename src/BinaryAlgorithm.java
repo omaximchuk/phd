@@ -18,6 +18,7 @@ public class BinaryAlgorithm implements Algorithm {
     private Double q = Conditions.q;
     private Double TIME_INTERVAL = Conditions.TIME_INTERVAL;
     private Integer TIME_STEPS = Conditions.TIME_STEPS;
+    private Integer SPACE_STEPS = Conditions.SPACE_STEPS;
 
     private Double[][] v1 = new Double[TIME_STEPS + 1][TIME_STEPS];
     private Double[][] v0 = new Double[TIME_STEPS + 1][TIME_STEPS];
@@ -59,7 +60,7 @@ public class BinaryAlgorithm implements Algorithm {
             }
         for (int i = 0; i < TIME_STEPS; i++) {
             v0[i][TIME_STEPS - 1] = 0.0;
-            v1[i][TIME_STEPS - 1] = 0.0;//(1 - propCosts) * s[SPACE_STEPS - 1][i] - fixedCosts;
+            v1[i][TIME_STEPS - 1] = (1 - propCosts) * s[i][TIME_STEPS - 1] - fixedCosts;
             edgePrice[i] = BigDecimal.ZERO;
         }
     }
@@ -75,7 +76,8 @@ public class BinaryAlgorithm implements Algorithm {
     }
 
     private void processArrays() {
-        for (int j = TIME_STEPS - 2; j >= 0; j--)
+        for (int j = TIME_STEPS - 2; j >= 0; j--) {
+            //System.out.print("time step = " + j + "   ");
             for (int i = 0; i <= j; i++) {
                 Double m1 = f(v0[i][j + 1], v0[i + 1][j + 1]);
                 Double n1 = f(v1[i][j + 1], v1[i + 1][j + 1]);
@@ -83,9 +85,13 @@ public class BinaryAlgorithm implements Algorithm {
                 Double n2 = (1 - propCosts) * s[i][j] - fixedCosts + m1;
                 v0[i][j] = Math.max(m1, m2);
                 v1[i][j] = Math.max(n1, n2);
+                //System.out.print("i = " + i + "; n1 = " + n1 + "::::");
+                //System.out.print("; n1 = " + n1 + "; n2 = " + n2 + "::::");
                 u0[i][j] = m1 > m2 ? 0 : -1;
                 u1[i][j] = n1 > n2 ? 0 : 1;
             }
+            //System.out.println();
+        }
     }
 
     private void detectPriceSlope() {

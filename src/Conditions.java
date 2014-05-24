@@ -4,7 +4,7 @@ public class Conditions {
 
     public static Double mu = 0.4;
     public static Double sigma = 0.8;
-    public static Double deltaT = 0.01;
+    public static Double deltaT = 0.05;
     public static Double h = sigma * sqrt(deltaT);
     public static Double deltaS = exp(h);
     public static Double s0 = 1.0;
